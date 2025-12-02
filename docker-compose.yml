@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Angular 21 SPA Development Server
+  web-spa:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: hackathon-web-spa
+    ports:
+      - "4200:4200"
+    volumes:
+      # Mount source code for hot reload
+      - ./apps/web-spa:/workspace/apps/web-spa
+      - ./packages/shared:/workspace/packages/shared
+      # Preserve node_modules
+      - web-spa-node-modules:/workspace/apps/web-spa/node_modules
+      - /workspace/packages/shared/node_modules
+    working_dir: /workspace/apps/web-spa
+    command: npm start -- --host 0.0.0.0 --poll 2000
+    environment:
+      - NODE_ENV=development
+    networks:
+      - hackathon-network
+
+  # Ionic Angular Mobile App Development Server
+  mobile-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: hackathon-mobile-app
+    ports:
+      - "8100:8100"
+      - "35729:35729" # LiveReload
+    volumes:
+      # Mount source code for hot reload
+      - ./apps/mobile-app:/workspace/apps/mobile-app
+      - ./packages/shared:/workspace/packages/shared
+      # Preserve node_modules
+      - mobile-app-node-modules:/workspace/apps/mobile-app/node_modules
+      - /workspace/packages/shared/node_modules
+    working_dir: /workspace/apps/mobile-app
+    command: npm start
+    environment:
+      - NODE_ENV=development
+    networks:
+      - hackathon-network
+
+volumes:
+  web-spa-node-modules:
+  mobile-app-node-modules:
+
+
+networks:
+  hackathon-network:
+    driver: bridge

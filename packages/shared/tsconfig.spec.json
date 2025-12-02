@@ -1,0 +1,26 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./out-tsc/spec",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "paths": {
+            "@angular/*": [
+                "./node_modules/@angular/*"
+            ]
+        },
+        "types": [
+            "jest",
+            "node"
+        ]
+    },
+    "include": [
+        "src/**/*.spec.ts",
+        "src/**/*.d.ts",
+        // "src/test-setup.ts"
+    ],
+    // "exclude": [
+    //     "node_modules",
+    //     "dist"
+    // ]
+}

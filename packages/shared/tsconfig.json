@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "esnext",
+        "lib": [
+            "ES2022",
+            "DOM",
+            "ESNext",
+            "ESNext.AsyncIterable"
+        ],
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "outDir": "./dist"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "**/*.spec.ts",
+        "src/test-setup.ts"
+    ]
+}
