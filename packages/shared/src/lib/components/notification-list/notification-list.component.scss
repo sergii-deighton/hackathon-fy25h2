@@ -9,6 +9,13 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+.message-list li.read {
+    background: #f6f8fb;
+    border-radius: 6px;
+    padding: 10px 10px 10px 12px;
+    color: #6b7480;
+}
+
 .message-list .meta {
     display: flex;
     gap: 8px;
@@ -31,6 +38,7 @@
 .message-list li.info .text { color: #1976d2; }
 .message-list li.warning .text { color: #e0981c; }
 .message-list li.error .text { color: #c62828; }
+.message-list li.read .text { color: #6b7480; }
 
 .notification-head {
     display: flex;
@@ -84,6 +92,19 @@
     box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.12);
 }
 
+.status-dot:not(.unread) {
+    background: #cdd5df;
+}
+
+.read-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4f5965;
+    background: #dfe5ee;
+    border-radius: 999px;
+    padding: 3px 8px;
+}
+
 .title-line {
     font-weight: 700;
     margin-bottom: 2px;
@@ -126,4 +147,9 @@
 .btn.ghost.danger {
     color: #c62828;
     border-color: rgba(198, 40, 40, 0.25);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

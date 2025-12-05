@@ -144,3 +144,47 @@ Environment/config notes:
 - **API/low-level services (stateless)**: Thin wrappers around REST endpoints; no state, only HTTP calls.
 - **Container components**: Own orchestration. Inject repositories, subscribe to their data, pass data down to presentational components via inputs, and wire outputs back to repository/API calls. Containers keep the handlers and coordination logic; presentational components stay dumb.
 - Testing implication: Presentational components can be shallow-tested; containers test interaction with repositories via mocks; repositories test state transitions; API services test HTTP contracts.
+
+## 10. Backend Stack & Data Flow (detailed)
+- **Runtime**: .NET (API + Worker), Entity Framework Core for data access/migrations.
+- **Persistence**: PostgreSQL (compose service) with EF Core migrations checked into the repo. Apply migrations on container startup.
+- **Seeding**: Seed script (EF Core seed or hosted service) to pre-populate sample notifications/types/users for demos.
+- **Messaging**: RabbitMQ (compose) with MassTransit in the worker for consuming/sending tasks.
+- **API Service (REST)**:
+  - Expose endpoints to read notifications, create notifications, mark read, delete, read user channel prefs, update prefs.
+  - Uses EF Core DbContext; runs migrations on start.
+  - Seeds demo data on start (guarded by env flag).
+- **Worker Service**:
+  - Subscribed to RabbitMQ via MassTransit.
+  - Processes send tasks: inserts notifications, sends email/SMS (stub for now), respects channel prefs.
+  - Also runs migrations/seed (or share a migration container) before consuming.
+- **Migrations**:
+  - Generate EF Core migrations and commit them.
+  - Run via `dotnet ef database update` on API/worker start, or a dedicated migration job in compose.
+- **Compose services** (summary):
+  - `postgres` + volume.
+  - `pgadmin` (optional UI).
+  - `rabbitmq` (with management).
+  - `notification-api` (.NET REST).
+  - `notification-worker` (.NET worker with MassTransit).
+  - Frontend dev servers stay separate (Angular/Ionic), but can point to API via env/proxy.
+- **Frontend wiring**:
+- Angular `NotificationsApiService` now points to the REST API (default `http://localhost:5001/api/notifications`; override with `window.NOTIFICATIONS_API_BASE` if needed).
+  - Repository remains stateful and still falls back to mock data if the API is unreachable.
+
+## 12. Demo quick-start (dev only)
+- Start backend infra: `docker-compose up postgres rabbitmq notification-api notification-worker` (add `pgadmin` if you want UI).
+- API swagger: `http://localhost:5001/swagger`.
+- Frontend: run `docker-compose up web-spa` (or `npm start` in `apps/web-spa`). By default it targets `http://localhost:5001/api/notifications`.
+- Optional override: in browser console `window.NOTIFICATIONS_API_BASE = 'http://localhost:5001/api/notifications'` then reload, if you need to point elsewhere.
+- Seed data: applied automatically on API/worker startup (via EF `Migrate()` + `SeedData`).
+
+## 11. Current Backend Implementation (checked-in)
+- EF Core context and migrations live in `services/notifications-shared` (`Data/Migrations/*`); both API and worker reference the shared project and call `Database.Migrate()` + `SeedData.EnsureSeededAsync()` on startup.
+- Initial migration creates `Notifications` and `NotificationChannelPreferences` with indexes/lengths aligned to the entities.
+- Compose services:
+  - `postgres` (5432), `pgadmin` (5050), `rabbitmq` (5672/15672), `notification-api` (exposes 5001 → 8080), `notification-worker`.
+  - API exposes minimal endpoints: list/create, mark read, delete at `/api/notifications`.
+- To apply migrations locally (optional since startup applies them):
+  - `dotnet ef database update --project services/notifications-shared --startup-project services/notifications-api --context NotificationDbContext`
+- Seeded demo data matches the UI sample (info/error/warning items plus channel prefs).

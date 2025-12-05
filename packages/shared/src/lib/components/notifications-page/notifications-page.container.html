@@ -16,9 +16,14 @@
 
     <div class="panel main-card">
         <div class="panel-header">
-            <h2 *ngIf="view === 'notifications'">Notifications</h2>
-            <h2 *ngIf="view === 'send'">Send a Notification</h2>
-            <h2 *ngIf="view === 'dashboard'">Notifications</h2>
+            <div class="title">
+                <h2 *ngIf="view === 'notifications'">Notifications</h2>
+                <h2 *ngIf="view === 'send'">Send a Notification</h2>
+                <h2 *ngIf="view === 'dashboard'">Notifications</h2>
+            </div>
+            <button *ngIf="view === 'notifications'" class="ghost-btn" type="button" (click)="refresh()">
+                Refresh
+            </button>
         </div>
         <div class="panel-body">
             <ng-container *ngIf="view === 'dashboard'">
@@ -30,7 +35,7 @@
                 <lib-notification-filters [selected]="category" (changeType)="setCategory($event)"></lib-notification-filters>
                 <lib-notification-list
                     [notifications]="filteredNotifications"
-                    (toggleStatus)="toggleStatus($event)"
+                    (markRead)="markRead($event)"
                     (remove)="removeNotification($event)"
                 ></lib-notification-list>
             </ng-container>

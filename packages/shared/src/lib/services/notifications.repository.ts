@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, tap } from 'rxjs';
 import { NotificationsApiService } from './notifications-api.service';
 import { NotificationItem, NotificationType } from '../types';
 import { NewNotificationPayload } from '../components/notification-form/notification-form.component';
@@ -28,7 +28,15 @@ export class NotificationsRepository {
     constructor(private api: NotificationsApiService) {}
 
     load(): void {
-        this.api.fetchNotifications().subscribe((data) => this.notificationsSubject.next(data));
+        const current = this.notificationsSubject.getValue();
+
+        this.api
+            .fetchNotifications()
+            .pipe(
+                map((fetched) => this.mergeStatuses(current, fetched)),
+                tap((data) => this.notificationsSubject.next(data))
+            )
+            .subscribe();
     }
 
     setCategory(category: 'all' | NotificationType): void {
@@ -36,38 +44,61 @@ export class NotificationsRepository {
     }
 
     createNotification(payload: NewNotificationPayload): void {
-        const now = new Date();
-        const timestamp = `${now.getHours().toString().padStart(2, '0')}:${now
-            .getMinutes()
-            .toString()
-            .padStart(2, '0')}`;
-        const next: NotificationItem = {
-            id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
-            sender: 'Demo User',
-            title: payload.title,
-            body: payload.body,
-            timestamp,
-            type: payload.type,
-            source: payload.source || 'Demo',
-            status: 'unread',
-            link: payload.link
-        };
-        this.notificationsSubject.next([next, ...this.notificationsSubject.getValue()]);
+        this.api.createNotification(payload).subscribe((created) => {
+            this.notificationsSubject.next([created, ...this.notificationsSubject.getValue()]);
+        });
     }
 
-    toggleStatus(id: string): void {
-        this.notificationsSubject.next(
-            this.notificationsSubject.getValue().map((n) =>
-                n.id === id ? { ...n, status: n.status === 'unread' ? 'read' : 'unread' } : n
-            )
+    markRead(id: string): void {
+        const current = this.notificationsSubject.getValue();
+        const target = current.find((n) => n.id === id);
+
+        if (!target || target.status === 'read') {
+            return;
+        }
+
+        const optimistic = current.map((n) =>
+            n.id === id ? { ...n, status: 'read' as const } : n
         );
+        this.notificationsSubject.next(optimistic);
+
+        this.api.markRead(id).subscribe({
+            error: () => {
+                // Roll back on API failure
+                this.notificationsSubject.next(current);
+            }
+        });
     }
 
-    remove(id: string): void {
-        this.notificationsSubject.next(this.notificationsSubject.getValue().filter((n) => n.id !== id));
-    }
+  remove(id: string): void {
+    // Optimistically remove and roll back only on unexpected errors (keep hidden on 404)
+    const current = this.notificationsSubject.getValue();
+    const optimistic = current.filter((n) => n.id !== id);
+    this.notificationsSubject.next(optimistic);
+
+    this.api.delete(id).subscribe({
+      next: () => {},
+      error: (err) => {
+        if (!err || err.status !== 404) {
+          this.notificationsSubject.next(current);
+        }
+      }
+    });
+  }
 
     private countByType(list: NotificationItem[], type: NotificationType): number {
         return list.filter((n) => n.type === type).length;
+    }
+
+    private mergeStatuses(current: NotificationItem[], incoming: NotificationItem[]): NotificationItem[] {
+        const currentMap = new Map(current.map((n) => [n.id, n]));
+
+        return incoming.map((item) => {
+            const existing = currentMap.get(item.id);
+            if (existing?.status === 'read' && item.status !== 'read') {
+                return { ...item, status: 'read' as const };
+            }
+            return item;
+        });
     }
 }
