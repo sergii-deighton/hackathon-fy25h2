@@ -43,14 +43,14 @@
                     <span class="icon bullet"></span>
                     <span class="text">Dashboard</span>
                 </a>
-                <a class="link" [class.active]="selected === 'messages'" (click)="select('messages')">
+                <a class="link" [class.active]="selected === 'notifications'" (click)="select('notifications')">
                     <span class="icon bullet"></span>
-                    <span class="text">Messages</span>
-                    <span class="badge info">2</span>
+                    <span class="text">Notifications</span>
+                    <span class="badge info">{{ notifications.length }}</span>
                 </a>
                 <a class="link" [class.active]="selected === 'send'" (click)="select('send')">
                     <span class="icon send"></span>
-                    <span class="text">Send a message</span>
+                    <span class="text">Send a notification</span>
                     <span class="badge success">NEW</span>
                 </a>
             </nav>
@@ -59,49 +59,55 @@
         <section class="content">
             <div class="content-header" *ngIf="selected === 'dashboard'">
                 <div class="title-block">
-                    <h1>Dashboard</h1>
-                    <span class="subtitle">Control panel</span>
+                    <h1>Notifications</h1>
+                    <span class="subtitle">Latest updates across the workspace</span>
                 </div>
             </div>
 
             <div class="kpi-row" *ngIf="selected === 'dashboard'">
                 <div class="kpi blue">
-                    <div class="kpi-value">150</div>
-                    <div class="kpi-label">New Orders</div>
-                    <a href="#" class="more">More info</a>
+                    <div class="kpi-value">{{ totalCount }}</div>
+                    <div class="kpi-label">Total notifications</div>
+                    <a href="#" class="more">View all</a>
                 </div>
                 <div class="kpi green">
-                    <div class="kpi-value">53%</div>
-                    <div class="kpi-label">Bounce Rate</div>
-                    <a href="#" class="more">More info</a>
+                    <div class="kpi-value">{{ infoCount }}</div>
+                    <div class="kpi-label">Info</div>
+                    <a href="#" class="more">View info</a>
                 </div>
                 <div class="kpi orange">
-                    <div class="kpi-value">44</div>
-                    <div class="kpi-label">User Registrations</div>
-                    <a href="#" class="more">More info</a>
+                    <div class="kpi-value">{{ warningCount }}</div>
+                    <div class="kpi-label">Warnings</div>
+                    <a href="#" class="more">View warnings</a>
                 </div>
                 <div class="kpi red">
-                    <div class="kpi-value">65</div>
-                    <div class="kpi-label">Unique Visitors</div>
-                    <a href="#" class="more">More info</a>
+                    <div class="kpi-value">{{ errorCount }}</div>
+                    <div class="kpi-label">Errors</div>
+                    <a href="#" class="more">View errors</a>
                 </div>
             </div>
 
             <div class="panel main-card">
                 <div class="panel-header">
-                    <h2 *ngIf="selected === 'messages'">Messages</h2>
-                    <h2 *ngIf="selected === 'send'">Send a Message</h2>
-                    <h2 *ngIf="selected === 'dashboard'">Dashboard</h2>
+                    <h2 *ngIf="selected === 'notifications'">Notifications</h2>
+                    <h2 *ngIf="selected === 'send'">Send a Notification</h2>
+                    <h2 *ngIf="selected === 'dashboard'">Notifications</h2>
                 </div>
                 <div class="panel-body">
                     <ng-container *ngIf="selected === 'dashboard'">
                         <p class="hint">Quick metrics for your control panel.</p>
                     </ng-container>
 
-                    <ng-container *ngIf="selected === 'messages'">
-                        <p class="hint">Select "Messages" in the left panel to manage chat features.</p>
+                    <ng-container *ngIf="selected === 'notifications'">
+                        <p class="hint">Select "Notifications" in the left panel to manage recent updates.</p>
+                        <div class="filter-tabs">
+                            <button type="button" [class.active]="category === 'all'" (click)="setCategory('all')">All</button>
+                            <button type="button" [class.active]="category === 'info'" (click)="setCategory('info')">Info</button>
+                            <button type="button" [class.active]="category === 'warning'" (click)="setCategory('warning')">Warning</button>
+                            <button type="button" [class.active]="category === 'error'" (click)="setCategory('error')">Errors</button>
+                        </div>
                         <ul class="message-list">
-                            <li *ngFor="let msg of messages">
+                            <li *ngFor="let msg of filteredNotifications" [class]="msg.type">
                                 <div class="meta">
                                     <span class="sender">{{ msg.sender }}</span>
                                     <span class="time">{{ msg.timestamp }}</span>
@@ -112,12 +118,12 @@
                     </ng-container>
 
                     <ng-container *ngIf="selected === 'send'">
-                        <label class="field-label" for="messageBox">Message</label>
+                        <label class="field-label" for="messageBox">Notification</label>
                         <textarea
                             id="messageBox"
                             [(ngModel)]="messageText"
                             rows="4"
-                            placeholder="Type your message..."
+                            placeholder="Type your notification..."
                         ></textarea>
                         <button class="btn primary" (click)="sendMessage()">Send</button>
 

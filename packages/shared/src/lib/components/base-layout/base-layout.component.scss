@@ -377,6 +377,37 @@ nav .link.active {
     color: #5b6675;
 }
 
+.filter-tabs {
+    display: inline-flex;
+    gap: 8px;
+    margin: 8px 0 12px;
+}
+
+.filter-tabs button {
+    all: unset;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(15, 31, 51, 0.07);
+    color: #1c2430;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-tabs button:hover {
+    border-color: rgba(15, 31, 51, 0.2);
+    background: rgba(15, 31, 51, 0.1);
+}
+
+.filter-tabs button.active {
+    background: #1e88e5;
+    color: #fff;
+    border-color: #1e88e5;
+    box-shadow: 0 8px 16px rgba(30, 136, 229, 0.25);
+}
+
 .message-list {
     list-style: none;
     padding: 0;
@@ -407,6 +438,9 @@ nav .link.active {
 .message-list .text {
     color: #222;
 }
+.message-list li.info .text { color: #1976d2; }
+.message-list li.warning .text { color: #e0981c; }
+.message-list li.error .text { color: #c62828; }
 
 .field-label {
     display: block;

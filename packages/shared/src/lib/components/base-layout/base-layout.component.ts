@@ -10,15 +10,17 @@ import { FormsModule } from '@angular/forms';
     styleUrls: ['./base-layout.component.scss']
 })
 export class BaseLayoutComponent {
-    selected: 'dashboard' | 'messages' | 'send' = 'dashboard';
+    selected: 'dashboard' | 'notifications' | 'send' = 'dashboard';
+    category: 'all' | 'info' | 'warning' | 'error' = 'all';
     isMenuOpen = true;
     isMobile = false;
     languages: Array<'English' | 'French'> = ['English', 'French'];
     selectedLanguage: 'English' | 'French' = 'English';
 
-    messages = [
-        { id: '1', sender: 'Alice', text: 'Welcome to the hackathon!', timestamp: '10:00' },
-        { id: '2', sender: 'Bob', text: 'Chat features will appear here.', timestamp: '10:05' }
+    notifications = [
+        { id: '1', sender: 'Alice', text: 'Welcome to the hackathon!', timestamp: '10:00', type: 'info' as const },
+        { id: '2', sender: 'Bob', text: 'Deploy failed on mobile pipeline.', timestamp: '10:05', type: 'error' as const },
+        { id: '3', sender: 'Ops', text: 'Latency increased on EU region.', timestamp: '12:44', type: 'warning' as const }
     ];
 
     messageText = '';
@@ -37,7 +39,7 @@ export class BaseLayoutComponent {
         this.isMenuOpen = !this.isMenuOpen;
     }
 
-    select(section: 'dashboard' | 'messages' | 'send'): void {
+    select(section: 'dashboard' | 'notifications' | 'send'): void {
         this.selected = section;
         this.status = { type: null, text: '' };
         if (this.isMobile) {
@@ -47,11 +49,11 @@ export class BaseLayoutComponent {
 
     sendMessage(): void {
         if (!this.messageText.trim()) {
-            this.status = { type: 'error', text: 'Please enter a message.' };
+            this.status = { type: 'error', text: 'Please enter a notification.' };
             return;
         }
         // Placeholder success; replace with real API call later
-        this.status = { type: 'success', text: 'Message sent (stub).' };
+        this.status = { type: 'success', text: 'Notification sent (stub).' };
         this.messageText = '';
     }
 
@@ -62,5 +64,36 @@ export class BaseLayoutComponent {
 
     setLanguage(lang: 'English' | 'French'): void {
         this.selectedLanguage = lang;
+    }
+
+    setCategory(category: 'all' | 'info' | 'warning' | 'error'): void {
+        this.category = category;
+    }
+
+    get filteredNotifications(): typeof this.notifications {
+        if (this.category === 'all') {
+            return this.notifications;
+        }
+        return this.notifications.filter((n) => n.type === this.category);
+    }
+
+    get totalCount(): number {
+        return this.notifications.length;
+    }
+
+    get infoCount(): number {
+        return this.countByType('info');
+    }
+
+    get warningCount(): number {
+        return this.countByType('warning');
+    }
+
+    get errorCount(): number {
+        return this.countByType('error');
+    }
+
+    private countByType(type: 'info' | 'warning' | 'error'): number {
+        return this.notifications.filter((n) => n.type === type).length;
     }
 }
