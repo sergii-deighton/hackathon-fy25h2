@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -106,15 +106,9 @@ services:
     command: >
       sh -c "
         cd /workspace/packages/shared &&
-        if [ ! -d node_modules ] || [ -z \"$(ls -A node_modules 2>/dev/null)\" ]; then
-          echo \"Installing shared deps...\" &&
-          npm install --legacy-peer-deps;
-        fi &&
+        npm install --legacy-peer-deps &&
         cd /workspace/apps/web-spa &&
-        if [ ! -d node_modules ] || [ -z \"$(ls -A node_modules 2>/dev/null)\" ]; then
-          echo \"Installing web-spa deps...\" &&
-          npm install --legacy-peer-deps;
-        fi &&
+        npm install --legacy-peer-deps &&
         npm start -- --host 0.0.0.0 --poll 2000"
     environment:
       - NODE_ENV=development
@@ -162,7 +156,6 @@ volumes:
   web-spa-node-modules:
   mobile-app-node-modules:
   shared-node-modules:
-
 
 networks:
   hackathon-network:

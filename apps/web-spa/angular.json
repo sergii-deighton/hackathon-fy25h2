@@ -28,15 +28,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/favicon.ico",
+              "src/assets",
+              "src/firebase-messaging-sw.js"
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/styles.scss"]
           },
-            "configurations": {
-              "production": {
-                "budgets": [
+          "configurations": {
+            "production": {
+              "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
@@ -49,14 +50,14 @@
                 }
               ],
               "outputHashing": "all"
-              },
-              "development": {
-                "optimization": false,
-                "extractLicenses": false,
-                "sourceMap": true,
-                "aot": true
-              }
             },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "aot": true
+            }
+          },
           "defaultConfiguration": "production"
         },
         "serve": {

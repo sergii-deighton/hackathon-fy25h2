@@ -1,38 +1,38 @@
 {
-    "name": "@hackathon/shared",
-    "version": "0.0.1",
-    "private": true,
-    "description": "Shared components and services for hackathon",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "build": "tsc",
-        "watch": "tsc --watch",
-        "test": "jest",
-        "test:watch": "jest --watch",
-        "test:coverage": "jest --coverage"
-    },
-    "peerDependencies": {
-        "@angular/core": ">=20.0.0",
-        "@angular/forms": ">=20.0.0",
-        "@angular/material": ">=21.0.0",
-        "@angular/cdk": ">=21.0.0",
-        "rxjs": "~7.8.0"
-    },
-    "devDependencies": {
-        "@angular/core": "^21.0.0",
-        "@angular/common": "^21.0.0",
-        "@angular/compiler": "^21.0.0",
-        "@angular/platform-browser": "^21.0.0",
-        "@angular/platform-browser-dynamic": "^21.0.0",
-        "@angular/forms": "^21.0.0",
-        "@angular/material": "^21.0.0",
-        "@angular/cdk": "^21.0.0",
-        "@types/jest": "^29.5.0",
-        "jest": "^29.7.0",
-        "jest-preset-angular": "^14.0.0",
-        "rxjs": "~7.8.0",
-        "typescript": "~5.9.2",
-        "zone.js": "~0.15.0"
-    }
+  "name": "@hackathon/shared",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Shared components and services for hackathon",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=20.0.0",
+    "@angular/forms": ">=20.0.0",
+    "@angular/material": ">=21.0.0",
+    "@angular/cdk": ">=21.0.0",
+    "rxjs": "~7.8.0"
+  },
+  "devDependencies": {
+    "@angular/core": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@angular/platform-browser-dynamic": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/material": "^21.0.0",
+    "@angular/cdk": "^21.0.0",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.0.0",
+    "rxjs": "~7.8.0",
+    "typescript": "~5.9.2",
+    "zone.js": "~0.15.0"
+  }
 }
