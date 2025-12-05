@@ -17,13 +17,56 @@ export class BaseLayoutComponent {
     languages: Array<'English' | 'French'> = ['English', 'French'];
     selectedLanguage: 'English' | 'French' = 'English';
 
-    notifications = [
-        { id: '1', sender: 'Alice', text: 'Welcome to the hackathon!', timestamp: '10:00', type: 'info' as const },
-        { id: '2', sender: 'Bob', text: 'Deploy failed on mobile pipeline.', timestamp: '10:05', type: 'error' as const },
-        { id: '3', sender: 'Ops', text: 'Latency increased on EU region.', timestamp: '12:44', type: 'warning' as const }
+    notifications: Array<{
+        id: string;
+        sender: string;
+        title: string;
+        body: string;
+        timestamp: string;
+        type: 'info' | 'warning' | 'error';
+        source: string;
+        link?: string;
+        status: 'unread' | 'read';
+    }> = [
+        {
+            id: '1',
+            sender: 'Alice',
+            title: 'Welcome to the hackathon!',
+            body: 'Kick off the demo by reviewing the notification architecture.',
+            timestamp: '10:00',
+            type: 'info',
+            source: 'ReleaseService',
+            status: 'read',
+            link: '#'
+        },
+        {
+            id: '2',
+            sender: 'Bob',
+            title: 'Deploy failed on mobile pipeline.',
+            body: 'Action required: investigate the Android build logs.',
+            timestamp: '10:05',
+            type: 'error',
+            source: 'CI/CD',
+            status: 'unread'
+        },
+        {
+            id: '3',
+            sender: 'Ops',
+            title: 'Latency increased on EU region.',
+            body: 'EU users may see slower responses. Monitoring in progress.',
+            timestamp: '12:44',
+            type: 'warning',
+            source: 'Ops',
+            status: 'unread',
+            link: '#'
+        }
     ];
 
-    messageText = '';
+    newTitle = '';
+    newBody = '';
+    newType: 'info' | 'warning' | 'error' = 'info';
+    newLink = '';
+    newSource = 'Demo';
     status: { type: 'success' | 'error' | null; text: string } = { type: null, text: '' };
 
     constructor() {
@@ -48,13 +91,32 @@ export class BaseLayoutComponent {
     }
 
     sendMessage(): void {
-        if (!this.messageText.trim()) {
-            this.status = { type: 'error', text: 'Please enter a notification.' };
+        if (!this.newTitle.trim() || !this.newBody.trim()) {
+            this.status = { type: 'error', text: 'Please add a title and body.' };
             return;
         }
-        // Placeholder success; replace with real API call later
-        this.status = { type: 'success', text: 'Notification sent (stub).' };
-        this.messageText = '';
+        const now = new Date();
+        const timestamp = `${now.getHours().toString().padStart(2, '0')}:${now
+            .getMinutes()
+            .toString()
+            .padStart(2, '0')}`;
+        const next = {
+            id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
+            sender: 'Demo User',
+            title: this.newTitle.trim(),
+            body: this.newBody.trim(),
+            timestamp,
+            type: this.newType,
+            source: this.newSource || 'Demo',
+            status: 'unread' as const,
+            link: this.newLink?.trim() || undefined
+        };
+        this.notifications = [next, ...this.notifications];
+        this.status = { type: 'success', text: 'Notification added locally.' };
+        this.newTitle = '';
+        this.newBody = '';
+        this.newLink = '';
+        this.newType = 'info';
     }
 
     private syncMenuWithWidth(width: number): void {
@@ -95,5 +157,15 @@ export class BaseLayoutComponent {
 
     private countByType(type: 'info' | 'warning' | 'error'): number {
         return this.notifications.filter((n) => n.type === type).length;
+    }
+
+    toggleStatus(id: string): void {
+        this.notifications = this.notifications.map((n) =>
+            n.id === id ? { ...n, status: n.status === 'unread' ? 'read' : 'unread' } : n
+        );
+    }
+
+    removeNotification(id: string): void {
+        this.notifications = this.notifications.filter((n) => n.id !== id);
     }
 }

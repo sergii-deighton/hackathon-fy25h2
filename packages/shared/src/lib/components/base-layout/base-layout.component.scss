@@ -308,6 +308,10 @@ nav .link.active {
     justify-content: space-between;
 }
 
+.notification-stats {
+    margin-bottom: 16px;
+}
+
 .title-block h1 {
     margin: 0;
     font-size: 1.6rem;
@@ -442,6 +446,93 @@ nav .link.active {
 .message-list li.warning .text { color: #e0981c; }
 .message-list li.error .text { color: #c62828; }
 
+.notification-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.notification-head .meta {
+    margin: 0;
+}
+
+.tags {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.type-tag {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    background: rgba(0, 0, 0, 0.08);
+    color: #1c2430;
+}
+
+.type-tag.info { background: rgba(25, 118, 210, 0.15); color: #1976d2; }
+.type-tag.warning { background: rgba(224, 152, 28, 0.18); color: #c97c00; }
+.type-tag.error { background: rgba(198, 40, 40, 0.12); color: #c62828; }
+
+.source-tag {
+    font-size: 0.8rem;
+    color: #5b6675;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #9fb2cc;
+    display: inline-block;
+}
+
+.status-dot.unread {
+    background: #1e88e5;
+    box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.12);
+}
+
+.title-line {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.body-line {
+    margin-bottom: 4px;
+}
+
+.link-line {
+    color: #1e88e5;
+    font-weight: 700;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.btn.ghost {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    color: #1c2430;
+}
+
+.btn.ghost:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.btn.ghost.danger {
+    color: #c62828;
+    border-color: rgba(198, 40, 40, 0.25);
+}
+
 .field-label {
     display: block;
     margin-bottom: 6px;
@@ -456,6 +547,23 @@ textarea {
     border: 1px solid rgba(0, 0, 0, 0.2);
     margin-bottom: 10px;
     font-family: inherit;
+}
+
+input,
+select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    font-family: inherit;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
 }
 
 .btn {

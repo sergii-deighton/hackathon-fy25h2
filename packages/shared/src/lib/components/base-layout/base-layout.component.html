@@ -64,26 +64,28 @@
                 </div>
             </div>
 
-            <div class="kpi-row" *ngIf="selected === 'dashboard'">
-                <div class="kpi blue">
-                    <div class="kpi-value">{{ totalCount }}</div>
-                    <div class="kpi-label">Total notifications</div>
-                    <a href="#" class="more">View all</a>
-                </div>
-                <div class="kpi green">
-                    <div class="kpi-value">{{ infoCount }}</div>
-                    <div class="kpi-label">Info</div>
-                    <a href="#" class="more">View info</a>
-                </div>
-                <div class="kpi orange">
-                    <div class="kpi-value">{{ warningCount }}</div>
-                    <div class="kpi-label">Warnings</div>
-                    <a href="#" class="more">View warnings</a>
-                </div>
-                <div class="kpi red">
-                    <div class="kpi-value">{{ errorCount }}</div>
-                    <div class="kpi-label">Errors</div>
-                    <a href="#" class="more">View errors</a>
+            <div class="notification-stats" *ngIf="selected === 'dashboard'">
+                <div class="kpi-row">
+                    <div class="kpi blue">
+                        <div class="kpi-value">{{ totalCount }}</div>
+                        <div class="kpi-label">Total notifications</div>
+                        <a href="#" class="more">View all</a>
+                    </div>
+                    <div class="kpi green">
+                        <div class="kpi-value">{{ infoCount }}</div>
+                        <div class="kpi-label">Info</div>
+                        <a href="#" class="more">View info</a>
+                    </div>
+                    <div class="kpi orange">
+                        <div class="kpi-value">{{ warningCount }}</div>
+                        <div class="kpi-label">Warnings</div>
+                        <a href="#" class="more">View warnings</a>
+                    </div>
+                    <div class="kpi red">
+                        <div class="kpi-value">{{ errorCount }}</div>
+                        <div class="kpi-label">Errors</div>
+                        <a href="#" class="more">View errors</a>
+                    </div>
                 </div>
             </div>
 
@@ -100,35 +102,76 @@
 
                     <ng-container *ngIf="selected === 'notifications'">
                         <p class="hint">Select "Notifications" in the left panel to manage recent updates.</p>
-                        <div class="filter-tabs">
+                        <div class="filter-tabs notification-filters">
                             <button type="button" [class.active]="category === 'all'" (click)="setCategory('all')">All</button>
                             <button type="button" [class.active]="category === 'info'" (click)="setCategory('info')">Info</button>
                             <button type="button" [class.active]="category === 'warning'" (click)="setCategory('warning')">Warning</button>
                             <button type="button" [class.active]="category === 'error'" (click)="setCategory('error')">Errors</button>
                         </div>
-                        <ul class="message-list">
+                        <ul class="message-list notification-list">
                             <li *ngFor="let msg of filteredNotifications" [class]="msg.type">
-                                <div class="meta">
-                                    <span class="sender">{{ msg.sender }}</span>
-                                    <span class="time">{{ msg.timestamp }}</span>
+                                <div class="notification-head">
+                                    <div class="meta">
+                                        <span class="sender">{{ msg.sender }}</span>
+                                        <span class="time">{{ msg.timestamp }}</span>
+                                    </div>
+                                    <div class="tags">
+                                        <span class="type-tag" [class.info]="msg.type === 'info'" [class.warning]="msg.type === 'warning'" [class.error]="msg.type === 'error'">
+                                            {{ msg.type }}
+                                        </span>
+                                        <span class="source-tag">{{ msg.source }}</span>
+                                        <span class="status-dot" [class.unread]="msg.status === 'unread'"></span>
+                                    </div>
                                 </div>
-                                <div class="text">{{ msg.text }}</div>
+                                <div class="text">
+                                    <div class="title-line">{{ msg.title }}</div>
+                                    <div class="body-line">{{ msg.body }}</div>
+                                    <a *ngIf="msg.link" class="link-line" [href]="msg.link">Open link</a>
+                                </div>
+                                <div class="actions">
+                                    <button type="button" class="btn ghost" (click)="toggleStatus(msg.id)">
+                                        {{ msg.status === 'unread' ? 'Mark as read' : 'Mark as unread' }}
+                                    </button>
+                                    <button type="button" class="btn ghost danger" (click)="removeNotification(msg.id)">Delete</button>
+                                </div>
                             </li>
                         </ul>
                     </ng-container>
 
                     <ng-container *ngIf="selected === 'send'">
-                        <label class="field-label" for="messageBox">Notification</label>
-                        <textarea
-                            id="messageBox"
-                            [(ngModel)]="messageText"
-                            rows="4"
-                            placeholder="Type your notification..."
-                        ></textarea>
-                        <button class="btn primary" (click)="sendMessage()">Send</button>
+                        <div class="notification-form">
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <label class="field-label" for="titleBox">Title</label>
+                                    <input id="titleBox" type="text" [(ngModel)]="newTitle" placeholder="Deployment failed on mobile pipeline" />
+                                </div>
+                                <div class="form-field">
+                                    <label class="field-label" for="typeSelect">Type</label>
+                                    <select id="typeSelect" [(ngModel)]="newType">
+                                        <option value="info">Info</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="error">Error</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label class="field-label" for="sourceBox">Source</label>
+                                    <input id="sourceBox" type="text" [(ngModel)]="newSource" placeholder="CI/CD" />
+                                </div>
+                            </div>
+                            <label class="field-label" for="messageBox">Body</label>
+                            <textarea
+                                id="messageBox"
+                                [(ngModel)]="newBody"
+                                rows="4"
+                                placeholder="Add any useful details for this notification"
+                            ></textarea>
+                            <label class="field-label" for="linkBox">Link (optional)</label>
+                            <input id="linkBox" type="text" [(ngModel)]="newLink" placeholder="https://..." />
+                            <button class="btn primary" (click)="sendMessage()">Send</button>
 
-                        <div *ngIf="status.type" class="status" [class.success]="status.type === 'success'" [class.error]="status.type === 'error'">
-                            {{ status.text }}
+                            <div *ngIf="status.type" class="status" [class.success]="status.type === 'success'" [class.error]="status.type === 'error'">
+                                {{ status.text }}
+                            </div>
                         </div>
                     </ng-container>
                 </div>
