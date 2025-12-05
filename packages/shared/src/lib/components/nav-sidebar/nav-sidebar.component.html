@@ -1,0 +1,24 @@
+<aside class="sidenav">
+    <div class="user-block">
+        <div class="avatar-sm">HP</div>
+        <div class="user-meta">
+            <div class="name">Hackathon Team</div>
+            <div class="status"><span class="dot"></span> Online</div>
+        </div>
+    </div>
+    <nav>
+        <div class="section-label">MAIN NAVIGATION</div>
+        <a
+            *ngFor="let item of navItems"
+            class="link"
+            [class.active]="activeNav === item.id"
+            (click)="navSelect.emit(item.id)"
+        >
+            <span class="icon bullet"></span>
+            <span class="text">{{ item.label }}</span>
+            <span *ngIf="item.badge" class="badge" [class.success]="item.variant === 'success'" [class.info]="item.variant === 'info'">
+                {{ item.badge }}
+            </span>
+        </a>
+    </nav>
+</aside>

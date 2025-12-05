@@ -1,0 +1,28 @@
+<ul class="message-list notification-list">
+    <li *ngFor="let msg of notifications" [class]="msg.type">
+        <div class="notification-head">
+            <div class="meta">
+                <span class="sender">{{ msg.sender }}</span>
+                <span class="time">{{ msg.timestamp }}</span>
+            </div>
+            <div class="tags">
+                <span class="type-tag" [class.info]="msg.type === 'info'" [class.warning]="msg.type === 'warning'" [class.error]="msg.type === 'error'">
+                    {{ msg.type }}
+                </span>
+                <span class="source-tag">{{ msg.source }}</span>
+                <span class="status-dot" [class.unread]="msg.status === 'unread'"></span>
+            </div>
+        </div>
+        <div class="text">
+            <div class="title-line">{{ msg.title }}</div>
+            <div class="body-line">{{ msg.body }}</div>
+            <a *ngIf="msg.link" class="link-line" [href]="msg.link">Open link</a>
+        </div>
+        <div class="actions">
+            <button type="button" class="btn ghost" (click)="toggleStatus.emit(msg.id)">
+                {{ msg.status === 'unread' ? 'Mark as read' : 'Mark as unread' }}
+            </button>
+            <button type="button" class="btn ghost danger" (click)="remove.emit(msg.id)">Delete</button>
+        </div>
+    </li>
+</ul>

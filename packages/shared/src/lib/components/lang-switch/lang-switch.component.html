@@ -1,0 +1,12 @@
+<div class="lang-switch">
+    <button
+        *ngFor="let lang of languages"
+        type="button"
+        class="lang-btn"
+        [class.active]="selectedLanguage === lang"
+        (click)="languageSelect.emit(lang)"
+    >
+        <span class="flag" [ngClass]="{ 'flag-en': lang === 'English', 'flag-fr': lang === 'French' }" aria-hidden="true"></span>
+        <span class="lang-label">{{ lang }}</span>
+    </button>
+</div>

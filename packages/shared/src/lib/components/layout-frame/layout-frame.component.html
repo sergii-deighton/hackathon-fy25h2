@@ -1,0 +1,34 @@
+<div class="page">
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="burger" type="button" (click)="toggleMenu.emit()">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="brand">
+                <div class="brand-mark brand-logo" aria-label="Hackathon logo"></div>
+                <div class="brand-text">
+                    <div class="brand-name">Hackathon</div>
+                    <div class="brand-sub">Control panel</div>
+                </div>
+            </div>
+        </div>
+        <div class="topbar-actions">
+            <lib-lang-switch
+                [languages]="languages"
+                [selectedLanguage]="selectedLanguage"
+                (languageSelect)="languageSelect.emit($event)"
+            ></lib-lang-switch>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <aside class="sidenav" [class.open]="isMenuOpen">
+            <lib-nav-sidebar [navItems]="navItems" [activeNav]="activeNav" (navSelect)="navSelect.emit($event)"></lib-nav-sidebar>
+        </aside>
+
+        <section class="content">
+            <ng-content></ng-content>
+        </section>
+    </div>
+</div>
+<div class="overlay" *ngIf="isMenuOpen" (click)="toggleMenu.emit()"></div>

@@ -1,13 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NotificationFiltersComponent } from '../notification-filters/notification-filters.component';
+import { NotificationFormComponent, NewNotificationPayload } from '../notification-form/notification-form.component';
+import { NotificationListComponent } from '../notification-list/notification-list.component';
+import { NotificationStatsComponent } from '../notification-stats/notification-stats.component';
+import { LayoutFrameComponent, NavItem } from '../layout-frame/layout-frame.component';
+import { NotificationItem } from '../../types';
 
 @Component({
     selector: 'lib-base-layout',
     standalone: true,
-    imports: [CommonModule, FormsModule],
-    templateUrl: './base-layout.component.html',
-    styleUrls: ['./base-layout.component.scss']
+    imports: [
+        CommonModule,
+        FormsModule,
+        LayoutFrameComponent,
+        NotificationStatsComponent,
+        NotificationFiltersComponent,
+        NotificationListComponent,
+        NotificationFormComponent
+    ],
+    templateUrl: './base-layout.component.html'
 })
 export class BaseLayoutComponent {
     selected: 'dashboard' | 'notifications' | 'send' = 'dashboard';
@@ -16,18 +29,13 @@ export class BaseLayoutComponent {
     isMobile = false;
     languages: Array<'English' | 'French'> = ['English', 'French'];
     selectedLanguage: 'English' | 'French' = 'English';
+    navItems: NavItem[] = [
+        { id: 'dashboard', label: 'Dashboard' },
+        { id: 'notifications', label: 'Notifications', badge: 0, variant: 'info' },
+        { id: 'send', label: 'Send a notification', badge: 'NEW', variant: 'success' }
+    ];
 
-    notifications: Array<{
-        id: string;
-        sender: string;
-        title: string;
-        body: string;
-        timestamp: string;
-        type: 'info' | 'warning' | 'error';
-        source: string;
-        link?: string;
-        status: 'unread' | 'read';
-    }> = [
+    notifications: NotificationItem[] = [
         {
             id: '1',
             sender: 'Alice',
@@ -62,11 +70,6 @@ export class BaseLayoutComponent {
         }
     ];
 
-    newTitle = '';
-    newBody = '';
-    newType: 'info' | 'warning' | 'error' = 'info';
-    newLink = '';
-    newSource = 'Demo';
     status: { type: 'success' | 'error' | null; text: string } = { type: null, text: '' };
 
     constructor() {
@@ -82,6 +85,13 @@ export class BaseLayoutComponent {
         this.isMenuOpen = !this.isMenuOpen;
     }
 
+    onNavSelect(navId: string): void {
+        const allowed: Array<'dashboard' | 'notifications' | 'send'> = ['dashboard', 'notifications', 'send'];
+        if (allowed.includes(navId as any)) {
+            this.select(navId as 'dashboard' | 'notifications' | 'send');
+        }
+    }
+
     select(section: 'dashboard' | 'notifications' | 'send'): void {
         this.selected = section;
         this.status = { type: null, text: '' };
@@ -90,33 +100,25 @@ export class BaseLayoutComponent {
         }
     }
 
-    sendMessage(): void {
-        if (!this.newTitle.trim() || !this.newBody.trim()) {
-            this.status = { type: 'error', text: 'Please add a title and body.' };
-            return;
-        }
+    handleSubmit(payload: NewNotificationPayload): void {
         const now = new Date();
         const timestamp = `${now.getHours().toString().padStart(2, '0')}:${now
             .getMinutes()
             .toString()
             .padStart(2, '0')}`;
-        const next = {
+        const next: NotificationItem = {
             id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
             sender: 'Demo User',
-            title: this.newTitle.trim(),
-            body: this.newBody.trim(),
+            title: payload.title,
+            body: payload.body,
             timestamp,
-            type: this.newType,
-            source: this.newSource || 'Demo',
-            status: 'unread' as const,
-            link: this.newLink?.trim() || undefined
+            type: payload.type,
+            source: payload.source || 'Demo',
+            status: 'unread',
+            link: payload.link
         };
         this.notifications = [next, ...this.notifications];
         this.status = { type: 'success', text: 'Notification added locally.' };
-        this.newTitle = '';
-        this.newBody = '';
-        this.newLink = '';
-        this.newType = 'info';
     }
 
     private syncMenuWithWidth(width: number): void {

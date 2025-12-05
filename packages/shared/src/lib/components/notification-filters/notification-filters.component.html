@@ -1,0 +1,6 @@
+<div class="filter-tabs notification-filters">
+    <button type="button" [class.active]="selected === 'all'" (click)="changeType.emit('all')">All</button>
+    <button type="button" [class.active]="selected === 'info'" (click)="changeType.emit('info')">Info</button>
+    <button type="button" [class.active]="selected === 'warning'" (click)="changeType.emit('warning')">Warning</button>
+    <button type="button" [class.active]="selected === 'error'" (click)="changeType.emit('error')">Errors</button>
+</div>

@@ -1,0 +1,130 @@
+.sidenav {
+    background: #2f4258;
+    color: #e0e7f0;
+    padding: 18px 14px;
+    box-sizing: border-box;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    min-height: calc(100vh - 64px);
+    height: 100%;
+}
+
+.user-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    margin-bottom: 14px;
+}
+
+.avatar-sm {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #3498db;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 700;
+}
+
+.user-meta .name {
+    font-weight: 700;
+    color: #f7f9fc;
+}
+
+.user-meta .status {
+    font-size: 0.85rem;
+    color: #c4cedc;
+}
+
+.user-meta .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #43d17c;
+    margin-right: 6px;
+}
+
+.section-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: #bac6d6;
+    margin: 10px 8px 8px;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+nav .link {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+nav .link:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+nav .link.active {
+    background: #2b6fb8;
+    color: #fff;
+}
+
+.icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: #7fa0c0;
+}
+
+.icon.bullet {
+    border-radius: 50%;
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #f4f7fb;
+}
+
+.badge.info {
+    background: #00c0ef;
+    color: #0b1c2a;
+}
+
+.badge.success {
+    background: #00a65a;
+    color: #0b1c2a;
+}
+
+@media (max-width: 900px) {
+    .sidenav {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        width: 240px;
+        height: calc(100vh - 64px);
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+        z-index: 20;
+    }
+
+    .sidenav.open {
+        transform: translateX(0);
+    }
+}

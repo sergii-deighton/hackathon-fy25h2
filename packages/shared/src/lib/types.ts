@@ -9,3 +9,17 @@ export interface User {
 export interface AppState {
     isLoaded: boolean;
 }
+
+export type NotificationType = 'info' | 'warning' | 'error';
+
+export interface NotificationItem {
+    id: string;
+    sender: string;
+    title: string;
+    body: string;
+    timestamp: string;
+    type: NotificationType;
+    source: string;
+    link?: string;
+    status: 'unread' | 'read';
+}

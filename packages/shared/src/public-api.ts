@@ -3,5 +3,10 @@
  */
 
 export * from './lib/types';
-export * from './lib/components/top-bar/top-bar.component';
 export * from './lib/components/base-layout/base-layout.component';
+export * from './lib/components/notification-stats/notification-stats.component';
+export * from './lib/components/notification-filters/notification-filters.component';
+export * from './lib/components/notification-list/notification-list.component';
+export * from './lib/components/notification-form/notification-form.component';
+export * from './lib/components/layout-frame/layout-frame.component';
+export * from './lib/components/lang-switch/lang-switch.component';

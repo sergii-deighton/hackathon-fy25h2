@@ -1,0 +1,34 @@
+<div class="notification-form">
+    <div class="form-row">
+        <div class="form-field">
+            <label class="field-label" for="titleBox">Title</label>
+            <input id="titleBox" type="text" [(ngModel)]="title" placeholder="Deployment failed on mobile pipeline" />
+        </div>
+        <div class="form-field">
+            <label class="field-label" for="typeSelect">Type</label>
+            <select id="typeSelect" [(ngModel)]="type">
+                <option value="info">Info</option>
+                <option value="warning">Warning</option>
+                <option value="error">Error</option>
+            </select>
+        </div>
+        <div class="form-field">
+            <label class="field-label" for="sourceBox">Source</label>
+            <input id="sourceBox" type="text" [(ngModel)]="source" placeholder="CI/CD" />
+        </div>
+    </div>
+    <label class="field-label" for="messageBox">Body</label>
+    <textarea
+        id="messageBox"
+        [(ngModel)]="body"
+        rows="4"
+        placeholder="Add any useful details for this notification"
+    ></textarea>
+    <label class="field-label" for="linkBox">Link (optional)</label>
+    <input id="linkBox" type="text" [(ngModel)]="link" placeholder="https://..." />
+    <button class="btn primary" type="button" (click)="onSubmit()">Send</button>
+
+    <div *ngIf="statusType" class="status" [class.success]="statusType === 'success'" [class.error]="statusType === 'error'">
+        {{ statusMessage }}
+    </div>
+</div>

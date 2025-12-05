@@ -1,0 +1,36 @@
+.notification-stats {
+    margin-bottom: 16px;
+}
+
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.kpi {
+    padding: 14px 16px;
+    border-radius: 6px;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.kpi-value {
+    font-size: 1.7rem;
+    font-weight: 800;
+}
+
+.kpi-label {
+    opacity: 0.9;
+}
+
+.kpi .more {
+    display: inline-block;
+    margin-top: 6px;
+    font-weight: 600;
+}
+
+.kpi.blue { background: #2b6fb8; }
+.kpi.green { background: #00a65a; }
+.kpi.orange { background: #f39c12; }
+.kpi.red { background: #dd4b39; }
