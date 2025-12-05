@@ -22,9 +22,7 @@
     </header>
 
     <div class="page-body">
-        <aside class="sidenav" [class.open]="isMenuOpen">
-            <lib-nav-sidebar [navItems]="navItems" [activeNav]="activeNav" (navSelect)="navSelect.emit($event)"></lib-nav-sidebar>
-        </aside>
+        <lib-nav-sidebar [navItems]="navItems" [activeNav]="activeNav" [isOpen]="isMenuOpen" (navSelect)="navSelect.emit($event)"></lib-nav-sidebar>
 
         <section class="content">
             <ng-content></ng-content>

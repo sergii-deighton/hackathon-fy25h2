@@ -1,0 +1,48 @@
+<section class="content">
+    <div class="content-header" *ngIf="view === 'dashboard'">
+        <div class="title-block">
+            <h1>Notifications</h1>
+            <span class="subtitle">Latest updates across the workspace</span>
+        </div>
+    </div>
+
+    <lib-notification-stats
+        *ngIf="view === 'dashboard'"
+        [total]="totalCount"
+        [info]="infoCount"
+        [warning]="warningCount"
+        [error]="errorCount"
+    ></lib-notification-stats>
+
+    <div class="panel main-card">
+        <div class="panel-header">
+            <h2 *ngIf="view === 'notifications'">Notifications</h2>
+            <h2 *ngIf="view === 'send'">Send a Notification</h2>
+            <h2 *ngIf="view === 'dashboard'">Notifications</h2>
+        </div>
+        <div class="panel-body">
+            <ng-container *ngIf="view === 'dashboard'">
+                <p class="hint">Quick metrics for your control panel.</p>
+            </ng-container>
+
+            <ng-container *ngIf="view === 'notifications'">
+                <p class="hint">Select "Notifications" in the left panel to manage recent updates.</p>
+                <lib-notification-filters [selected]="category" (changeType)="setCategory($event)"></lib-notification-filters>
+                <lib-notification-list
+                    [notifications]="filteredNotifications"
+                    (toggleStatus)="toggleStatus($event)"
+                    (remove)="removeNotification($event)"
+                ></lib-notification-list>
+            </ng-container>
+
+            <ng-container *ngIf="view === 'send'">
+                <lib-notification-form
+                    [defaultType]="'info'"
+                    [statusMessage]="status.text"
+                    [statusType]="status.type"
+                    (submitNotification)="handleSubmit($event)"
+                ></lib-notification-form>
+            </ng-container>
+        </div>
+    </div>
+</section>

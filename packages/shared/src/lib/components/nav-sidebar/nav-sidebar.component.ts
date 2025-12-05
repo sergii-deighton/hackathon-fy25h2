@@ -13,5 +13,6 @@ import { NavItem } from '../layout-frame/layout-frame.component';
 export class NavSidebarComponent {
     @Input() navItems: NavItem[] = [];
     @Input() activeNav = '';
+    @Input() isOpen = true;
     @Output() navSelect = new EventEmitter<string>();
 }
