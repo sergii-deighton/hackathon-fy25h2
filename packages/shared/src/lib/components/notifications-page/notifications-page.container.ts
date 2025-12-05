@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { NotificationItem } from '../../types';
 import { NotificationsRepository } from '../../services/notifications.repository';
@@ -36,25 +36,48 @@ export class NotificationsPageContainer implements OnInit, OnDestroy {
 
     private destroy$ = new Subject<void>();
 
-    constructor(private repo: NotificationsRepository) {}
+    constructor(private repo: NotificationsRepository, private cdr: ChangeDetectorRef) {}
 
     ngOnInit(): void {
         this.repo.load();
 
         this.repo.notifications$.pipe(takeUntil(this.destroy$)).subscribe((list) => {
             this.notifications = list;
+            this.cdr.markForCheck();
         });
 
         this.repo.filteredNotifications$
             .pipe(takeUntil(this.destroy$))
-            .subscribe((list) => (this.filteredNotifications = list));
+            .subscribe((list) => {
+                this.filteredNotifications = list;
+                this.cdr.markForCheck();
+            });
 
-        this.repo.totalCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => (this.totalCount = count));
-        this.repo.infoCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => (this.infoCount = count));
-        this.repo.warningCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => (this.warningCount = count));
-        this.repo.errorCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => (this.errorCount = count));
+        this.repo.totalCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => {
+            this.totalCount = count;
+            this.cdr.markForCheck();
+        });
+        this.repo.infoCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => {
+            this.infoCount = count;
+            this.cdr.markForCheck();
+        });
+        this.repo.warningCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => {
+            this.warningCount = count;
+            this.cdr.markForCheck();
+        });
+        this.repo.errorCount$.pipe(takeUntil(this.destroy$)).subscribe((count) => {
+            this.errorCount = count;
+            this.cdr.markForCheck();
+        });
 
-        this.repo.category$.pipe(takeUntil(this.destroy$)).subscribe((cat) => (this.category = cat));
+        this.repo.category$.pipe(takeUntil(this.destroy$)).subscribe((cat) => {
+            this.category = cat;
+            this.cdr.markForCheck();
+        });
+    }
+
+    refresh(): void {
+        this.repo.load();
     }
 
     ngOnDestroy(): void {
@@ -75,8 +98,8 @@ export class NotificationsPageContainer implements OnInit, OnDestroy {
         this.status = { type: 'success', text: 'Notification added locally.' };
     }
 
-    toggleStatus(id: string): void {
-        this.repo.toggleStatus(id);
+    markRead(id: string): void {
+        this.repo.markRead(id);
     }
 
     removeNotification(id: string): void {

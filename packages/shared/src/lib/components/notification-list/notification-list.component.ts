@@ -12,6 +12,6 @@ import { NotificationItem } from '../../types';
 })
 export class NotificationListComponent {
     @Input() notifications: NotificationItem[] = [];
-    @Output() toggleStatus = new EventEmitter<string>();
+    @Output() markRead = new EventEmitter<string>();
     @Output() remove = new EventEmitter<string>();
 }

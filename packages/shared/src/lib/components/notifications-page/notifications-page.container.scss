@@ -33,10 +33,30 @@
 .panel-header {
     padding: 14px 16px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 .panel-header h2 {
     margin: 0;
+}
+
+.ghost-btn {
+    border: 1px solid #d8e0ea;
+    background: #f7fafc;
+    color: #1a2634;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.ghost-btn:hover {
+    background: #eef2f6;
+    border-color: #c5d0de;
 }
 
 .panel-body {

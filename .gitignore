@@ -22,6 +22,8 @@ build/
 out/
 .angular/
 www/
+**/bin/
+**/obj/
 
 # Environment files
 .env
