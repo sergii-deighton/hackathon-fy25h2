@@ -27,6 +27,7 @@
               "src/polyfills.ts"
             ],
             "tsConfig": "tsconfig.app.json",
+            "aot": true,
             "inlineStyleLanguage": "scss",
             "assets": [
               {
@@ -65,7 +66,8 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "aot": true
             },
             "ci": {
               "progress": false

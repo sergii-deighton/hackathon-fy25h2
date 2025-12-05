@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { TopBarComponent } from '@hackathon/shared';
+import { BaseLayoutComponent } from '@hackathon/shared';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, TopBarComponent],
+    imports: [CommonModule, BaseLayoutComponent],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })

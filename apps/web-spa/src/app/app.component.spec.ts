@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { TopBarComponent } from '@hackathon/shared';
-import { RouterOutlet } from '@angular/router';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
+import { BaseLayoutComponent } from '@hackathon/shared';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
     let component: AppComponent;
@@ -11,8 +9,8 @@ describe('AppComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [AppComponent, TopBarComponent, RouterOutlet],
-            providers: [provideRouter(routes)]
+            imports: [AppComponent, BaseLayoutComponent],
+            providers: [provideAnimations()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(AppComponent);
@@ -28,22 +26,15 @@ describe('AppComponent', () => {
         expect(component.title).toBe('web-spa');
     });
 
-    it('should render top-bar component', () => {
+    it('should render base layout', () => {
         const compiled = fixture.nativeElement as HTMLElement;
-        const topBar = compiled.querySelector('lib-top-bar');
-        expect(topBar).toBeTruthy();
+        const layout = compiled.querySelector('lib-base-layout');
+        expect(layout).toBeTruthy();
     });
 
-    it('should render welcome banner', () => {
+    it('should render message control panel', () => {
         const compiled = fixture.nativeElement as HTMLElement;
-        const banner = compiled.querySelector('.welcome-banner');
-        expect(banner).toBeTruthy();
-        expect(banner?.textContent).toContain('Welcome to the Hackathon!');
-    });
-
-    it('should have router outlet', () => {
-        const compiled = fixture.nativeElement as HTMLElement;
-        const routerOutlet = compiled.querySelector('router-outlet');
-        expect(routerOutlet).toBeTruthy();
+        const panelTitle = compiled.querySelector('mat-card-title');
+        expect(panelTitle?.textContent).toContain('Message Control');
     });
 });

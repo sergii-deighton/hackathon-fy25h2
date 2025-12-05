@@ -30,6 +30,9 @@
       ],
       "@hackathon/shared/*": [
         "../../packages/shared/src/*"
+      ],
+      "@angular/platform-browser/animations": [
+        "./node_modules/@angular/platform-browser/types/animations.d.ts"
       ]
     }
   },
